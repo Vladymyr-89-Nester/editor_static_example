@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { FC } from "react";
 import { SelectableContainer } from "../selectable-container";
 
-export interface ColumnProps {
+export interface ColumnProps extends React.HTMLProps<HTMLDivElement> {
   children?: React.ReactNode;
   selected?: boolean;
   onSelect?(): void;
