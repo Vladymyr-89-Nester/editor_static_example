@@ -215,6 +215,13 @@ h6 {
   font-weight: bold;
 }
 
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
 .action {
   all: unset;
   display: block;
