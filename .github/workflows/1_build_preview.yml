@@ -3,8 +3,12 @@
 name: Build & Preview
 # Controls when the workflow will run
 on:
+  # Triggers the workflow on push events for main and master branches
+  push:
+    branches: [main, master]
+
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
