@@ -42,6 +42,20 @@ export const useEditor = () => {
     setSelected({ type: "row", id: newRowId });
   };
 
+  const handleDeleteRow = (idToCheck: string) => {
+    setRows((prev) =>
+      prev.filter((row) => {
+        if (row.id === idToCheck) return false;
+
+        if (row.columns.some((col) => col.id === idToCheck)) return false;
+
+        return true;
+      })
+    );
+
+    setSelected(null);
+  };
+
   const handleAddColumn = () => {
     let activeRowId: string | null = null;
 
@@ -76,6 +90,17 @@ export const useEditor = () => {
     setSelected({ type: "column", id: newColumnId });
   };
 
+  const handleDeleteColumn = (columnId: string) => {
+    setRows((prev) =>
+      prev.map((row) => ({
+        ...row,
+        columns: row.columns.filter((col) => col.id !== columnId),
+      }))
+    );
+
+    setSelected(null);
+  };
+
   const handleTextChange = (value: string) => {
     if (selected?.type === "column") {
       updateColumn(selected.id, () => ({ content: value }));
@@ -108,7 +133,9 @@ export const useEditor = () => {
     selectedColumn,
     setSelected,
     handleAddRow,
+    handleDeleteRow,
     handleAddColumn,
+    handleDeleteColumn,
     handleTextChange,
     handleTextAlign,
     handleColumnTypeChange,

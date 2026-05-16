@@ -19,6 +19,8 @@ export const EditorStaticExample: FC = () => {
     handleTextAlign,
     handleColumnTypeChange,
     handleImageChange,
+    handleDeleteRow,
+    handleDeleteColumn,
   } = useEditor();
 
   return (
@@ -75,6 +77,8 @@ export const EditorStaticExample: FC = () => {
           onTextAlign={handleTextAlign}
           onTextChange={handleTextChange}
           onImageChange={handleImageChange}
+          onDeleteRow={handleDeleteRow}
+          onDeleteColumn={handleDeleteColumn}
         />
       </div>
     </>

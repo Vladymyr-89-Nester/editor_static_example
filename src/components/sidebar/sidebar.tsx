@@ -11,6 +11,8 @@ interface SidebarProps {
   onTextAlign: (align: "left" | "center" | "right") => void;
   onTextChange: (val: string) => void;
   onImageChange: (val: string) => void;
+  onDeleteRow: (id: string) => void;
+  onDeleteColumn: (id: string) => void;
 }
 
 export const Sidebar: FC<SidebarProps> = ({
@@ -22,6 +24,8 @@ export const Sidebar: FC<SidebarProps> = ({
   onTextChange,
   onTextAlign,
   onImageChange,
+  onDeleteRow,
+  onDeleteColumn,
 }) => {
   const isRowActive = selected?.type === "row" || selected?.type === "column";
 
@@ -35,6 +39,11 @@ export const Sidebar: FC<SidebarProps> = ({
           <button className="action" onClick={onAddRow}>
             Add row
           </button>
+          {isRowActive && (
+            <button className="action danger" onClick={() => onDeleteRow(selected!.id)}>
+              Delete row
+            </button>
+          )}
         </div>
       </div>
 
@@ -45,6 +54,11 @@ export const Sidebar: FC<SidebarProps> = ({
             <button className="action" onClick={onAddColumn}>
               Add column
             </button>
+            {isColumnActive && (
+              <button className="action danger" onClick={() => onDeleteColumn(selected!.id)}>
+                Delete column
+              </button>
+            )}
           </div>
         </div>
       )}
