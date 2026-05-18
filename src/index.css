@@ -130,6 +130,12 @@ h6 {
   border-radius: 6px;
 }
 
+.row:empty::before {
+  content: "Empty row";
+  color: #b0b0b0;
+  font-size: 12px;
+}
+
 .column {
   flex: 1 1 0;
   min-width: 0;
@@ -142,6 +148,18 @@ h6 {
   /* outline: 1px solid #e6e6e6; */
   box-shadow: 0 0 0 1px #e6e6e6;
   border-radius: 6px;
+}
+
+.column:empty::before {
+  content: "Select content type";
+  color: #b0b0b0;
+  font-size: 12px;
+}
+
+.row:empty,
+.column:empty {
+  display: grid;
+  place-items: center;
 }
 
 .column>img {

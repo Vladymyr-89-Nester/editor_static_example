@@ -4,16 +4,18 @@ import { initialState } from "../constants";
 
 type SelectedState = { type: "row" | "column"; id: string } | null;
 
+const STORAGE_KEY = "editor_rows";
+
 export const useEditor = () => {
   const [rows, setRows] = useState<RowType[]>(() => {
-    const saved = localStorage.getItem("editor_rows");
+    const saved = localStorage.getItem(STORAGE_KEY);
 
     return saved ? JSON.parse(saved) : initialState;
   });
   const [selected, setSelected] = useState<SelectedState>(null);
 
   useEffect(() => {
-    localStorage.setItem("editor_rows", JSON.stringify(rows));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
   }, [rows]);
 
   const selectedColumn =
@@ -21,11 +23,12 @@ export const useEditor = () => {
       ? rows.flatMap((row) => row.columns).find((col) => col.id === selected.id) ?? null
       : null;
 
-  const updateColumn = (columnId: string, updater: (col: ColumnType) => Partial<ColumnType>) => {
+  const updateColumn = (columnId: string, updater: (col: ColumnType) => ColumnType) => {
     setRows((prev) =>
       prev.map((row) => ({
         ...row,
-        columns: row.columns.map((col) => (col.id === columnId ? ({ ...col, ...updater(col) } as ColumnType) : col)),
+
+        columns: row.columns.map((col) => (col.id === columnId ? updater(col) : col)),
       }))
     );
   };
@@ -102,29 +105,55 @@ export const useEditor = () => {
   };
 
   const handleTextChange = (value: string) => {
-    if (selected?.type === "column") {
-      updateColumn(selected.id, () => ({ content: value }));
-    }
+    if (selected?.type !== "column") return;
+
+    updateColumn(selected.id, (col) => {
+      if (col.type !== "text") return col;
+
+      return { ...col, content: value };
+    });
   };
 
   const handleTextAlign = (align: "left" | "center" | "right") => {
-    if (selected?.type === "column") {
-      updateColumn(selected.id, (col) => (col.type === "text" ? { align } : {}));
-    }
+    if (selected?.type !== "column") return;
+
+    updateColumn(selected.id, (col) => {
+      if (col.type !== "text") return col;
+
+      return { ...col, align };
+    });
   };
 
   const handleColumnTypeChange = (type: "text" | "image") => {
-    if (selected?.type === "column") {
-      updateColumn(selected.id, () =>
-        type === "text" ? { type: "text", content: "", align: "left" } : { type: "image", content: "" }
-      );
-    }
+    if (selected?.type !== "column") return;
+
+    updateColumn(selected.id, (col) => {
+      if (col.type === type) return col;
+
+      if (type === "text")
+        return {
+          id: col.id,
+          type: "text",
+          content: "",
+          align: "left",
+        };
+
+      return {
+        id: col.id,
+        type: "image",
+        content: "",
+      };
+    });
   };
 
   const handleImageChange = (value: string) => {
-    if (selected?.type === "column") {
-      updateColumn(selected.id, () => ({ content: value }));
-    }
+    if (selected?.type !== "column") return;
+
+    updateColumn(selected.id, (col) => {
+      if (col.type !== "image") return col;
+
+      return { ...col, content: value };
+    });
   };
 
   return {

@@ -8,6 +8,7 @@
 
 # production
 /build
+README_MY.md
 
 # misc
 .DS_Store
